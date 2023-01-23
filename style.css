@@ -164,11 +164,11 @@ body {
 	max-width: 30px;
 	color: white;
 	font-weight: 800;
-	border: 1px solid transparent;
-	border-radius: 5px;
 	background: none;
 	padding: 5px;
 	cursor: pointer;
+	border: none;
+	border-radius: 5px;
 }
 
 .edit-btn {
@@ -178,7 +178,8 @@ body {
 .done-btn:hover,
 .edit-btn:hover,
 .remove-btn:hover {
-	border: 1px solid white;
+	filter: brightness(0) invert(42%) sepia(55%) saturate(2096%) hue-rotate(335deg)
+		brightness(103%) contrast(110%);
 }
 
 .edit-input {
@@ -195,9 +196,15 @@ body {
 .edit-input:focus {
 	font-style: oblique;
 }
+
 .ok-btn {
-	background: #a2c700;
+	background: #ffbb00;
 	font-weight: 800;
+}
+
+.ok-btn:hover {
+	filter: unset;
+	background-color: #a2c700;
 }
 
 .list-done li p {
