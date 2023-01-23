@@ -1,12 +1,12 @@
 const inputEl = document.querySelector(".input-el");
 const addBtn = document.querySelector(".input-btn");
-const uLEl = document.querySelector(".list");
+const uLElToDo = document.querySelector(".list-todo-ul");
+const uLElDone = document.querySelector(".list-done-ul");
+const titleDoneEl = document.querySelector(".title-done");
 
-let editBtns = document.querySelectorAll(".edit-btn");
-let removeBtns = document.querySelectorAll(".remove-btn");
-let storedArray = JSON.parse(localStorage.getItem("mynotes")) || [];
+let storedArray = JSON.parse(localStorage.getItem("mynotes")) || [{}];
 
-let notesArray = [];
+let notesArray = [{}];
 let colorListNumber = 1;
 
 function getStoredArray() {
@@ -17,31 +17,43 @@ function getStoredArray() {
 getStoredArray();
 
 function saveInStorage() {
-	storedArray = [];
+	storedArray = [{}];
 	localStorage.setItem("mynotes", JSON.stringify(notesArray));
 }
 
 addBtn.addEventListener("click", function () {
 	let newNote = inputEl.value;
+	let newNoteOb = { text: newNote, done: false };
 	if (newNote != "") {
-		notesArray.unshift(newNote);
+		notesArray.unshift(newNoteOb);
 		inputEl.value = "";
 		renderNotes();
 	}
 });
 
 function renderNotes() {
-	let content = "";
+	let contentToDo = "";
+	let contentDone = "";
 	notesArray.forEach((el) => {
-		content += `<li class="list-item color-list${colorListNumber}">
-        <p class="note">${el}</p>
+		if (el.done === false) {
+			contentToDo += `<li class="list-item color-list${colorListNumber}">
+        <p class="note">${el.text}</p>
         <div class="btn-container">
         <button class="done-btn btn"><img src="img/done-icon.svg"></button>
         <button class="edit-btn btn "><img src="img/pencil-icon.svg"></button>
         <button class="remove-btn btn"><img src="img/close-icon.svg"></button>
     </div>
         </li>`;
-		
+		} else {
+			contentDone += `<li class="list-item color-list${colorListNumber}">
+			<p class="note">${el.text}</p>
+			<div class="btn-container">
+				<button class="revert-btn btn"><img src="img/arrow-icon.svg"></button>
+				<button class="remove-btn btn"><img src="img/close-icon.svg"></button>
+			</div>
+		</li>`;
+		}
+
 		if (colorListNumber === 1) {
 			colorListNumber++;
 		} else {
@@ -49,75 +61,101 @@ function renderNotes() {
 		}
 	});
 
-	uLEl.innerHTML = content;
+	if (checkIfHastaskDone() === true) {
+		titleDoneEl.classList.remove("invisible");
+	} else {
+		titleDoneEl.classList.add("invisible");
+	}
 
-	removeBtns = document.querySelectorAll(".remove-btn");
-	editBtns = document.querySelectorAll(".edit-btn");
-	doneBtns = document.querySelectorAll(".done-btn");
+	uLElToDo.innerHTML = contentToDo;
+	uLElDone.innerHTML = contentDone;
+
+	let removeBtns = document.querySelectorAll(".remove-btn");
+	let editBtns = document.querySelectorAll(".edit-btn");
+	let doneBtns = document.querySelectorAll(".done-btn");
+	let revertBtns = document.querySelectorAll(".revert-btn");
 
 	removeBtns.forEach((el) => el.addEventListener("click", removeNote));
 	editBtns.forEach((el) => el.addEventListener("click", editNote));
 	doneBtns.forEach((el) => el.addEventListener("click", markNoteAsDone));
+	revertBtns.forEach((el) => el.addEventListener("click", revertDone));
+
 	saveInStorage();
+}
+
+function checkIfHastaskDone() {
+	let hasTaskDone = notesArray.findIndex((item) => item.done);
+	return hasTaskDone != -1;
 }
 
 function markNoteAsDone() {
-	let noteTobeDrawn = this.parentElement.parentElement.querySelector(".note");
+	let noteDone = this.parentElement.parentElement.querySelector(".note");
+	let noteDoneContent = noteDone.innerText;
+	let indexOfNote = notesArray.findIndex((item) => {
+		return item.text === noteDoneContent;
+	});
+	console.log(indexOfNote);
+	notesArray[indexOfNote].done = true;
 
-	noteTobeDrawn.classList.toggle("note-done");
-
-	let noteToBeRemoved = noteTobeDrawn.innerText;
-	let indexOfNote = notesArray.indexOf(noteToBeRemoved);
-
-	if (indexOfNote != -1) {
-		notesArray.splice(indexOfNote, 1);
-	}
+	renderNotes();
 }
 
+function revertDone() {
+	let noteToBeReverted = this.parentElement.parentElement.querySelector(".note");
+	let noteContent = noteToBeReverted.innerText;
+	let indexOfNote = notesArray.findIndex((item) => {
+		return item.text === noteContent;
+	});
+	notesArray[indexOfNote].done = false;
+
+	renderNotes();
+}
 function removeNote() {
 	let liToBeRemoved = this.parentElement.parentElement;
 	let noteToBeRemoved = liToBeRemoved.querySelector(".note");
-	let indexOfNote = notesArray.indexOf(noteToBeRemoved.innerText);
-	noteToBeRemoved.classList.add("remove-style");
-	liToBeRemoved.remove();
+	let indexOfNote = notesArray.findIndex((item) => {
+		return (item.text = noteToBeRemoved.innerText);
+	});
 
-	if (indexOfNote != -1) {
-		notesArray.splice(indexOfNote, 1);
-	}
-
-	saveInStorage();
+	notesArray.splice(indexOfNote, 1);
+	renderNotes();
 }
 
 function editNote() {
 	let li = this.parentElement.parentElement;
 	let noteToBeEdited = li.querySelector(".note");
 	let noteToBeEditedContent = noteToBeEdited.innerText;
-	let indexOfNote = notesArray.indexOf(noteToBeEditedContent);
+	let indexOfNote = notesArray.findIndex((item) => {
+		return item.text === noteToBeEditedContent;
+	});
 
 	li.innerHTML = `
     <input class="edit-input">
     <div class="btn-container">
     <button class="done-btn btn"><img src="img/done-icon.svg"></button>
-    <button class="edit-btn ok-btn">OK</button>
+    <button class="ok-btn btn">OK</button>
     <button class="remove-btn btn"><img src="img/close-icon.svg"></button>
     </div>
     `;
 
 	let editInput = li.querySelector(".edit-input");
 	let editOkBtn = li.querySelector(".ok-btn");
+
+	editInput.value = noteToBeEditedContent;
 	editInput.focus();
+
 	window.addEventListener("click", () => {
 		editInput.focus();
 	});
-	editInput.value = noteToBeEditedContent;
+
 	editOkBtn.addEventListener("click", () => {
-		notesArray.splice(indexOfNote, 1, editInput.value);
+		notesArray[indexOfNote].text = editInput.value;
 		renderNotes();
 	});
+
 	editInput.addEventListener("keypress", (e) => {
 		if (e.key === "Enter") {
-			notesArray.splice(indexOfNote, 1, editInput.value);
-			renderNotes();
+			editOkBtn.click();
 		}
 	});
 }

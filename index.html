@@ -17,15 +17,26 @@
     <h1 class="main-title">Lista de <br><span class="text-highlight">Tarefas</span></h1>
     <div class="centralize">
         <div class="input-container">
-            <input type="text" class="input-el" placeholder="Escreva sua primeira tarefa!">
+            <input type="text" class="input-el" placeholder="Adicione sua tarefa!">
             <button class="input-btn">+</button>
         </div>
-        <div class="list-container">
-            <ul class="list list-todo">
+        <div class="list-container list-todo">
+            <ul class="list list-todo-ul">
 
             </ul>
-            <ul class="list list-done">
+        </div>
 
+        <h2 class="title-done">Tarefas realizadas</h2>
+        <div class="list-container  list-done">
+
+            <ul class="list list-done-ul">
+                <li class="list-item color-list${colorListNumber}">
+                    <p class="note">${el}</p>
+                    <div class="btn-container">
+                        <button class="revert-btn btn"><img src="img/arrow-icon.svg"></button>
+                        <button class="remove-btn btn"><img src="img/close-icon.svg"></button>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
