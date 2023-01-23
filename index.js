@@ -7,7 +7,7 @@ let removeBtns = document.querySelectorAll(".remove-btn");
 let storedArray = JSON.parse(localStorage.getItem("mynotes")) || [];
 
 let notesArray = [];
-let colorList = 1;
+let colorListNumber = 1;
 
 function getStoredArray() {
 	notesArray = storedArray;
@@ -33,8 +33,7 @@ addBtn.addEventListener("click", function () {
 function renderNotes() {
 	let content = "";
 	notesArray.forEach((el) => {
-		if (colorList === 1) {
-			content += `<li class="list-item color-list1">
+		content += `<li class="list-item color-list${colorListNumber}">
         <p class="note">${el}</p>
         <div class="btn-container">
         <button class="done-btn btn"><img src="img/done-icon.svg"></button>
@@ -42,20 +41,14 @@ function renderNotes() {
         <button class="remove-btn btn"><img src="img/close-icon.svg"></button>
     </div>
         </li>`;
-
-			colorList = 2;
+		
+		if (colorListNumber === 1) {
+			colorListNumber++;
 		} else {
-			content += `<li class="list-item color-list2">
-            <p class="note">${el}</p>
-            <div class="btn-container">
-                <button class="done-btn btn"><img src="img/done-icon.svg"></button>
-                <button class="edit-btn btn "><img src="img/pencil-icon.svg"></button>
-                <button class="remove-btn btn"><img src="img/close-icon.svg"></button>
-            </div>
-            </li>`;
-			colorList = 1;
+			colorListNumber--;
 		}
 	});
+
 	uLEl.innerHTML = content;
 
 	removeBtns = document.querySelectorAll(".remove-btn");
