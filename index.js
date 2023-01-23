@@ -10,11 +10,7 @@ let notesArray = [];
 let colorList = 1;
 
 function getStoredArray() {
-	if (storedArray.length > 0) {
-		notesArray = storedArray;
-	} else {
-		return;
-	}
+	notesArray = storedArray;
 	renderNotes();
 }
 
@@ -30,7 +26,6 @@ addBtn.addEventListener("click", function () {
 	if (newNote != "") {
 		notesArray.unshift(newNote);
 		inputEl.value = "";
-		console.log(notesArray);
 		renderNotes();
 	}
 });
@@ -86,24 +81,11 @@ function markNoteAsDone() {
 	}
 }
 
-// el.addEventListener("click", function () {
-// 	let liToBeRemoved = this.parentElement.parentElement;
-// 	let noteToBeRemoved = liToBeRemoved.querySelector(".note").innerText;
-// 	let indexOfNote = notesArray.indexOf(noteToBeRemoved);
-// 	console.log(indexOfNote);
-// 	liToBeRemoved.remove();
-
-// 	if (indexOfNote != -1) {
-// 		notesArray.splice(indexOfNote, 1);
-// 	}
-// });
-
 function removeNote() {
 	let liToBeRemoved = this.parentElement.parentElement;
 	let noteToBeRemoved = liToBeRemoved.querySelector(".note");
 	let indexOfNote = notesArray.indexOf(noteToBeRemoved.innerText);
 	noteToBeRemoved.classList.add("remove-style");
-	console.log(noteToBeRemoved.classList);
 	setTimeout(liToBeRemoved.remove(), 1000000);
 
 	if (indexOfNote != -1) {
