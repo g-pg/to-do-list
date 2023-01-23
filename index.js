@@ -86,6 +86,7 @@ function removeNote() {
 	let noteToBeRemoved = liToBeRemoved.querySelector(".note");
 	let indexOfNote = notesArray.indexOf(noteToBeRemoved.innerText);
 	noteToBeRemoved.classList.add("remove-style");
+	liToBeRemoved.remove();
 
 	if (indexOfNote != -1) {
 		notesArray.splice(indexOfNote, 1);
