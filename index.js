@@ -4,15 +4,22 @@ const uLEl = document.querySelector(".list");
 
 let editBtns = document.querySelectorAll(".edit-btn");
 let removeBtns = document.querySelectorAll(".remove-btn");
-let storedArray = JSON.parse(localStorage.getItem("mynotes"));
+let storedArray = JSON.parse(localStorage.getItem("mynotes")) || [];
+
 let notesArray = [];
 let colorList = 1;
+
 function getStoredArray() {
-	notesArray = storedArray;
+	if (storedArray.length > 0) {
+		notesArray = storedArray;
+	} else {
+		return;
+	}
 	renderNotes();
 }
 
 getStoredArray();
+
 function saveInStorage() {
 	storedArray = [];
 	localStorage.setItem("mynotes", JSON.stringify(notesArray));
@@ -79,17 +86,17 @@ function markNoteAsDone() {
 	}
 }
 
-el.addEventListener("click", function () {
-	let liToBeRemoved = this.parentElement.parentElement;
-	let noteToBeRemoved = liToBeRemoved.querySelector(".note").innerText;
-	let indexOfNote = notesArray.indexOf(noteToBeRemoved);
-	console.log(indexOfNote);
-	liToBeRemoved.remove();
+// el.addEventListener("click", function () {
+// 	let liToBeRemoved = this.parentElement.parentElement;
+// 	let noteToBeRemoved = liToBeRemoved.querySelector(".note").innerText;
+// 	let indexOfNote = notesArray.indexOf(noteToBeRemoved);
+// 	console.log(indexOfNote);
+// 	liToBeRemoved.remove();
 
-	if (indexOfNote != -1) {
-		notesArray.splice(indexOfNote, 1);
-	}
-});
+// 	if (indexOfNote != -1) {
+// 		notesArray.splice(indexOfNote, 1);
+// 	}
+// });
 
 function removeNote() {
 	let liToBeRemoved = this.parentElement.parentElement;
