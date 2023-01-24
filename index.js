@@ -84,17 +84,15 @@ function renderNotes() {
 }
 
 function checkIfHastaskDone() {
-	let hasTaskDone = notesArray.findIndex((item) => item.done);
+	let hasTaskDone = notesArray.findIndex((item) => item.done === true);
 	return hasTaskDone != -1;
 }
 
 function markNoteAsDone() {
 	let noteDone = this.parentElement.parentElement.querySelector(".note");
 	let noteDoneContent = noteDone.innerText;
-	let indexOfNote = notesArray.findIndex((item) => {
-		return item.text === noteDoneContent;
-	});
-	console.log(indexOfNote);
+	let indexOfNote = notesArray.findIndex((item) => item.text === noteDoneContent);
+
 	notesArray[indexOfNote].done = true;
 
 	renderNotes();
@@ -103,9 +101,8 @@ function markNoteAsDone() {
 function revertDone() {
 	let noteToBeReverted = this.parentElement.parentElement.querySelector(".note");
 	let noteContent = noteToBeReverted.innerText;
-	let indexOfNote = notesArray.findIndex((item) => {
-		return item.text === noteContent;
-	});
+	let indexOfNote = notesArray.findIndex((item) => item.text === noteContent);
+
 	notesArray[indexOfNote].done = false;
 
 	renderNotes();
@@ -113,9 +110,7 @@ function revertDone() {
 function removeNote() {
 	let liToBeRemoved = this.parentElement.parentElement;
 	let noteToBeRemoved = liToBeRemoved.querySelector(".note");
-	let indexOfNote = notesArray.findIndex((item) => {
-		return (item.text = noteToBeRemoved.innerText);
-	});
+	let indexOfNote = notesArray.findIndex((item) => (item.text = noteToBeRemoved.innerText));
 
 	notesArray.splice(indexOfNote, 1);
 	renderNotes();
@@ -125,9 +120,7 @@ function editNote() {
 	let li = this.parentElement.parentElement;
 	let noteToBeEdited = li.querySelector(".note");
 	let noteToBeEditedContent = noteToBeEdited.innerText;
-	let indexOfNote = notesArray.findIndex((item) => {
-		return item.text === noteToBeEditedContent;
-	});
+	let indexOfNote = notesArray.findIndex((item) => item.text === noteToBeEditedContent);
 
 	li.innerHTML = `
     <input class="edit-input">
