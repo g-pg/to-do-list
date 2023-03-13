@@ -54,14 +54,10 @@ function renderNotes() {
 		</li>`;
 		}
 
-		if (colorListNumber === 1) {
-			colorListNumber++;
-		} else {
-			colorListNumber--;
-		}
+		colorListNumber === 1 ? colorListNumber++ : colorListNumber--;
 	});
 
-	if (checkIfHastaskDone() === true) {
+	if (checkIfHastaskDone()) {
 		titleDoneEl.classList.remove("invisible");
 	} else {
 		titleDoneEl.classList.add("invisible");
@@ -110,7 +106,7 @@ function revertDone() {
 function removeNote() {
 	let liToBeRemoved = this.parentElement.parentElement;
 	let noteToBeRemoved = liToBeRemoved.querySelector(".note");
-	let indexOfNote = notesArray.findIndex((item) => (item.text = noteToBeRemoved.innerText));
+	let indexOfNote = notesArray.findIndex((item) => item.text == noteToBeRemoved.innerText);
 
 	notesArray.splice(indexOfNote, 1);
 	renderNotes();
